@@ -151,28 +151,36 @@ body {
 @media (max-width: 768px) {
   .main-header .container {
     padding: 1rem;
+    justify-content: space-between;
+  }
+
+  .hero-text h1 {
+    padding-right: 1.5rem;
   }
   
   .menu-toggle {
     display: flex;
+    position: relative;
+    z-index: 1001;
   }
   
   .main-nav {
     position: fixed;
     top: 0;
     right: -100%;
-    width: 70%;
-    max-width: 300px;
+    width: 80%;
+    max-width: 320px;
     height: 100vh;
     background: white;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    padding: 2rem;
-    transition: right 0.3s ease;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 1.5rem;
+    padding: 6rem 2rem 2rem;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
     z-index: 1000;
+    overflow-y: auto;
   }
   
   .main-nav.active {
@@ -180,8 +188,19 @@ body {
   }
   
   .nav-link {
-    font-size: 1.2rem;
-    padding: 0.5rem 1rem;
+    font-size: 1.1rem;
+    padding: 0.8rem 1.5rem;
+    margin: 0.25rem 0;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    display: block;
+    text-align: left;
+    width: 100%;
+  }
+  
+  .nav-link:hover {
+    background-color: #f8f9ff;
+    transform: translateX(4px);
   }
   
   .nav-link::after {
@@ -281,7 +300,8 @@ body {
   font-size: 3.5rem;
   font-weight: 800;
   color: #2d3748;
-  margin: 0 0 1.5rem;
+  margin: 0 auto 1.5rem;
+  text-align: center;
   line-height: 1.2;
   background: linear-gradient(90deg, #4f46e5, #7c88f8);
   -webkit-background-clip: text;
@@ -1365,6 +1385,23 @@ footer {
   .contact-form {
     width: 100%;
     max-width: 600px;
+    padding: 0 1.5rem;
+    box-sizing: border-box;
+  }
+  
+  .contact-form .form-group input,
+  .contact-form .form-group textarea {
+    font-size: 16px; /* Prevents iOS zoom on focus */
+    padding: 0.75rem 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* Prevent horizontal scroll on mobile */
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
   }
 }
 
