@@ -313,13 +313,13 @@ body {
 .hero-media {
   flex: 0 0 45%;
   max-width: 45%;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   position: relative;
   z-index: 1;
   padding: 2rem 0;
-  animation: float 6s ease-in-out infinite 1s;
+  animation: phoneFloat 8s ease-in-out infinite;
 }
 
 .app-screenshot {
@@ -375,7 +375,7 @@ body {
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1.75rem;
-  background: linear-gradient(135deg, #4f46e5 0%, #7c88f8 100%);
+  background: #7c88f8;
   color: white;
   border: none;
   border-radius: 50px;
@@ -428,10 +428,6 @@ body {
     font-size: 1.1rem;
   }
   
-  .hero-media {
-    max-width: 100%;
-    padding: 2rem 0;
-  }
   
   .app-screenshot {
     max-width: 250px;
@@ -448,9 +444,6 @@ body {
   50% { transform: translateY(-15px) rotate(5deg); }
 }
 
-.hero-media {
-  animation: phoneFloat 8s ease-in-out infinite;
-}
 
 /* Contact Section */
 .contact-section {
@@ -606,10 +599,6 @@ body {
     padding: 2rem 1.5rem;
   }
   
-  .hero-media {
-    order: -1;
-    padding-bottom: 0;
-  }
   
   .app-screenshot {
     left: 0;
@@ -1305,6 +1294,60 @@ footer {
 }
 
 /* Footer Styles */
+
+/* Show hero-media only on desktop */
+@media (min-width: 993px) {
+  .hero-media {
+    display: flex !important;
+  }
+
+
+}
+
+/* Hero text – responsive tweaks */
+@media (max-width: 992px) {
+  /* Gradient backdrop for readability */
+  .hero {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c88f8 100%);
+  }
+
+  /* Center entire hero layout */
+  .hero {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Center text block */
+  .hero-text {
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Scalable, high-contrast heading */
+  .hero-text h1 {
+    font-size: clamp(1.8rem, 6vw, 2.4rem);
+    background: none;
+    color: #ffffff;
+    -webkit-text-fill-color: #ffffff; /* Safari */
+    margin-bottom: 1rem;
+  }
+
+  /* Comfortable paragraph sizing */
+  .hero-text p {
+    font-size: clamp(1rem, 4.5vw, 1.15rem);
+    color: #e8edff;
+    line-height: 1.6;
+    max-width: 30ch;
+    margin: 0 auto 1.75rem;
+  }
+
+  /* Center badges */
+  .store-badges {
+    justify-content: center;
+  }
+}
+
 .site-footer {
   background-color: #2d3748;
   color: #e2e8f0;
