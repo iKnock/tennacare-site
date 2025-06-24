@@ -1,65 +1,80 @@
-console.log('Script loaded');
-
+// Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
   console.log('DOM fully loaded');
   
-  // Mobile menu toggle
+  // Mobile menu elements
   const menuToggle = document.querySelector('.menu-toggle');
   const mainNav = document.querySelector('.main-nav');
+  const menuOverlay = document.querySelector('.menu-overlay');
   const body = document.body;
   
-  console.log('Menu Toggle Element:', menuToggle);
-  console.log('Main Nav Element:', mainNav);
-  
-  if (menuToggle && mainNav) {
-    console.log('Adding event listeners');
-    
-    // Toggle menu on button click
-    menuToggle.addEventListener('click', function(e) {
-      console.log('Menu toggle clicked');
-      e.preventDefault();
-      e.stopPropagation();
-      
-      const isActive = this.classList.contains('active');
-      console.log('Current active state:', isActive);
-      
-      // Toggle classes
-      this.classList.toggle('active');
-      mainNav.classList.toggle('active');
-      body.classList.toggle('menu-open');
-      
-      // Update ARIA attributes
-      const isNowActive = !isActive;
-      this.setAttribute('aria-expanded', isNowActive);
-      mainNav.setAttribute('aria-hidden', !isNowActive);
-      
-      console.log('New active state:', isNowActive);
-    });
-    
-    // Close menu when clicking outside
-    document.addEventListener('click', function(e) {
-      if (mainNav.classList.contains('active') && 
-          !mainNav.contains(e.target) && 
-          !menuToggle.contains(e.target)) {
-        console.log('Clicked outside, closing menu');
-        menuToggle.classList.remove('active');
-        mainNav.classList.remove('active');
-        body.classList.remove('menu-open');
-        menuToggle.setAttribute('aria-expanded', 'false');
-        mainNav.setAttribute('aria-hidden', 'true');
-      }
-    });
+  // Check if elements exist
+  if (!menuToggle || !mainNav || !menuOverlay) {
+    return;
   }
   
-  // Close mobile menu when clicking on a nav link or button
+  // Set initial ARIA attributes
+  menuToggle.setAttribute('aria-expanded', 'false');
+  mainNav.setAttribute('aria-hidden', 'true');
+  
+  // Function to close menu
+  const closeMenu = () => {
+    menuToggle.classList.remove('active');
+    mainNav.classList.remove('active');
+    menuOverlay.classList.remove('active');
+    menuToggle.setAttribute('aria-expanded', 'false');
+    mainNav.setAttribute('aria-hidden', 'true');
+    body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+  };
+  
+  // Toggle menu on button click
+  menuToggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    
+    const currentState = this.getAttribute('aria-expanded') === 'true';
+    const newState = !currentState;
+    
+    // Toggle classes
+    this.classList.toggle('active', newState);
+    mainNav.classList.toggle('active', newState);
+    
+    // Update ARIA attributes
+    this.setAttribute('aria-expanded', newState);
+    mainNav.setAttribute('aria-hidden', !newState);
+    
+    // Toggle body scroll and overlay
+    body.style.overflow = newState ? 'hidden' : '';
+    document.documentElement.style.overflow = newState ? 'hidden' : '';
+    menuOverlay.classList.toggle('active', newState);
+  });
+  
+  // Close menu when clicking on a nav link or button
   document.querySelectorAll('.nav-link, .nav-button').forEach(link => {
-    link.addEventListener('click', () => {
-      if (mainNav.classList.contains('active')) {
-        menuToggle.classList.remove('active');
-        mainNav.classList.remove('active');
-        body.classList.remove('menu-open');
+    link.addEventListener('click', closeMenu);
+  });
+  
+  // Close menu when clicking on overlay
+  menuOverlay.addEventListener('click', closeMenu);
+  
+  // Close menu on window resize if it becomes desktop view
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      if (window.innerWidth > 768 && mainNav.classList.contains('active')) {
+        closeMenu();
       }
-    });
+    }, 250);
+  });
+  
+  // Handle keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mainNav.classList.contains('active')) {
+      closeMenu();
+      menuToggle.focus();
+    }
   });
   
   // Header scroll effect
